@@ -1,0 +1,39 @@
+name: Update FIDO Metadata
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download and decode MDS3 metadata
+        run: |
+          curl -sS https://mds3.fidoalliance.org/ -o mds3.jwt
+          python3 -c "
+          import base64, json
+          jwt = open('mds3.jwt').read().strip()
+          payload = jwt.split('.')[1]
+          payload += '=' * (-len(payload) % 4)
+          data = json.loads(base64.urlsafe_b64decode(payload))
+          json.dump(data, open('mds_metadata.json','w'), indent=2)
+          print(f\"Version: {data.get('no')}\")
+          "
+          rm mds3.jwt
+
+      - name: Commit if changed
+        run: |
+          git diff --quiet mds_metadata.json && echo "No changes" && exit 0
+          VERSION=$(python3 -c "import json; print(json.load(open('mds_metadata.json'))['no'])")
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add mds_metadata.json
+          git commit -m "Metadata v${VERSION}"
+          git push
