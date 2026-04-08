@@ -41,9 +41,14 @@
   display: flex;
   align-items: center;
   gap: 0.85rem;
-  margin-bottom: 0.85rem;
-  padding-bottom: 0.6rem;
+  padding: 0.6rem 0;
   border-bottom: 2px solid var(--gray-200);
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.15s;
+}
+.brand-header:hover {
+  opacity: 0.8;
 }
 
 .brand-logo {
@@ -74,6 +79,16 @@
   letter-spacing: -0.01em;
 }
 
+.brand-chevron {
+  font-size: 0.7rem;
+  color: var(--gray-400);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+.brand-section.expanded .brand-chevron {
+  transform: rotate(90deg);
+}
+
 .brand-count {
   font-size: 0.78rem;
   color: var(--gray-400);
@@ -85,6 +100,16 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 0.85rem;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.35s ease, opacity 0.25s ease, margin 0.25s ease;
+  margin-top: 0;
+}
+.brand-section.expanded .brand-cards {
+  max-height: 2000px;
+  opacity: 1;
+  margin-top: 0.85rem;
 }
 
 /* Brand cards are slightly more compact */
@@ -107,6 +132,30 @@
   width: 48px;
   height: 48px;
   font-size: 1.3rem;
+}
+
+/* ── Toggle all button ──────────────────────────────────────────────────────── */
+.results-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.btn-toggle-all {
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-family: var(--font);
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--white);
+  color: var(--teal);
+  border: 1.5px solid var(--teal);
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.btn-toggle-all:hover {
+  background: var(--teal);
+  color: var(--white);
 }
 
 /* ── Empty brand search ─────────────────────────────────────────────────────── */

@@ -215,6 +215,7 @@
 
       return `<div class="brand-section" ${delay}>
         <div class="brand-header">
+          <span class="brand-chevron">&#9654;</span>
           ${logoHtml}
           <span class="brand-name">${esc(g.brand)}</span>
           <span class="brand-count">${g.items.length} key${g.items.length !== 1 ? 's' : ''}</span>
@@ -223,9 +224,29 @@
       </div>`;
     }).join('');
 
-    container.querySelectorAll('.card[data-id]').forEach(card => {
-      card.addEventListener('click', () => navigate(state.query, card.dataset.id));
+    // Toggle individual brand sections
+    container.querySelectorAll('.brand-header').forEach(header => {
+      header.addEventListener('click', () => {
+        header.parentElement.classList.toggle('expanded');
+        updateToggleAllButton();
+      });
     });
+
+    // Card click → modal
+    container.querySelectorAll('.card[data-id]').forEach(card => {
+      card.addEventListener('click', (e) => {
+        e.stopPropagation();
+        navigate(state.query, card.dataset.id);
+      });
+    });
+  }
+
+  function updateToggleAllButton() {
+    const btn = document.getElementById('toggle-all');
+    if (!btn) return;
+    const sections = document.querySelectorAll('.brand-section');
+    const expanded = document.querySelectorAll('.brand-section.expanded');
+    btn.textContent = expanded.length >= sections.length ? 'Collapse All' : 'Expand All';
   }
 
   function renderResults() {
@@ -319,6 +340,15 @@
 
   // ── Bootstrap ─────────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
+    // Toggle all brands
+    document.getElementById('toggle-all').addEventListener('click', () => {
+      const sections = document.querySelectorAll('.brand-section');
+      const expanded = document.querySelectorAll('.brand-section.expanded');
+      const shouldExpand = expanded.length < sections.length;
+      sections.forEach(s => s.classList.toggle('expanded', shouldExpand));
+      updateToggleAllButton();
+    });
+
     let searchTimer;
     document.getElementById('search-input').addEventListener('input', e => {
       clearTimeout(searchTimer);
