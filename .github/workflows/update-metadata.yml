@@ -16,7 +16,7 @@ jobs:
 
       - name: Download and decode MDS3 metadata
         run: |
-          curl -sS https://mds3.fidoalliance.org/ -o mds3.jwt
+          curl -sSL https://mds3.fidoalliance.org/ -o mds3.jwt
           python3 -c "
           import base64, json
           jwt = open('mds3.jwt').read().strip()
