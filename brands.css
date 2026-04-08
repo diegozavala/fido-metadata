@@ -96,26 +96,33 @@
   margin-left: auto;
 }
 
+/* Collapse wrapper uses grid-template-rows for smooth height animation */
+.brand-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+.brand-section.expanded .brand-collapse {
+  grid-template-rows: 1fr;
+}
+
 .brand-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 0.85rem;
   overflow: hidden;
-  max-height: 0;
-  opacity: 0;
-  transition: max-height 0.35s ease, opacity 0.25s ease, margin 0.25s ease;
-  margin-top: 0;
+  padding-top: 0;
+  transition: padding-top 0.25s ease;
 }
 .brand-section.expanded .brand-cards {
-  max-height: 2000px;
-  opacity: 1;
-  margin-top: 0.85rem;
+  padding-top: 0.85rem;
 }
 
-/* Brand cards are slightly more compact */
+/* Brand cards are slightly more compact and skip the fadeUp animation */
 .brand-cards .card {
   padding: 1.25rem 1rem 1.1rem;
   gap: 0.5rem;
+  animation: none;
 }
 
 .brand-cards .card-icon-wrapper {
@@ -175,6 +182,7 @@
   .brand-header { gap: 0.6rem; }
   .brand-logo, .brand-logo-placeholder { width: 32px; height: 32px; }
   .brand-name { font-size: 0.95rem; }
+  .btn-toggle-all { font-size: 0.7rem; padding: 0.25rem 0.6rem; }
 }
 
 @media (max-width: 480px) {

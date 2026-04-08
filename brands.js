@@ -220,7 +220,9 @@
           <span class="brand-name">${esc(g.brand)}</span>
           <span class="brand-count">${g.items.length} key${g.items.length !== 1 ? 's' : ''}</span>
         </div>
-        <div class="brand-cards">${cardsHtml}</div>
+        <div class="brand-collapse">
+          <div class="brand-cards">${cardsHtml}</div>
+        </div>
       </div>`;
     }).join('');
 
